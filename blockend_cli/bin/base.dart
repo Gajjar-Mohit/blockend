@@ -1,6 +1,6 @@
 import 'package:args/args.dart';
-import 'package:blockend_cli/blockend_cli.dart';
 
+import 'src/create/create_projects.dart';
 
 void main(List<String> args) {
   final ArgParser argParser = ArgParser();

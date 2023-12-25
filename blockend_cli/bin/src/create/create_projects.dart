@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:blockend_cli/blockend_cli.dart';
+import 'create_folders.dart';
 
 class CreateProjects {
   CreateFolders createFolders = CreateFolders();
