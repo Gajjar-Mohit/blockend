@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:blockend_cli/blockend_cli.dart';
+import 'package:blockend/blockend.dart';
 
 void main() {
   test('adds one to input values', () {
