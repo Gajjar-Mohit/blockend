@@ -1,7 +1,7 @@
 name: blockend_cli
 description: A Dart package designed to streamline the development of robust blockchain applications.
-version: 0.0.4
-homepage:
+version: 0.0.5
+repository: https://github.com/Gajjar-Mohit/blockend/tree/main/blockend_cli
 
 environment:
   sdk: ">=3.1.5 <4.0.0"

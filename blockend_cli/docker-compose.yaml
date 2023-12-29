@@ -1,0 +1,11 @@
+version: '3'
+services:
+  geth-node:
+    image: ethereum/client-go
+    command: --http --dev
+    expose:
+      - "8545"
+      - "30303"
+    ports:
+      - "8545:8545"
+      - "30303:30303"
