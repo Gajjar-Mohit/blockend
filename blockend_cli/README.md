@@ -20,11 +20,9 @@ Blockend is a Dart package designed to streamline the development of robust bloc
 - **Blockchain Interactions:** Facilitate interactions with blockchain networks, making it easier to read and write data to the blockchain.
 - **Decentralized Application (DApp) Development:** Enhance the overall DApp development process with utilities tailored for decentralized applications.
 
+
 ## Getting Started
 
 To get started with Blockend, make sure you have Dart installed. You can then add Blockend to your project by adding the following to your `pubspec.yaml` file:
 
-```yaml
-dependencies:
-  blockend: ^1.0.0
 

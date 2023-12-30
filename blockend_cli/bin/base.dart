@@ -6,6 +6,7 @@ import 'src/create/create_projects.dart';
 void main(List<String> args) {
   final ArgParser argParser = ArgParser();
   argParser.addCommand("create");
+  argParser.addCommand("generate");
   CreateProjects createProjects = CreateProjects();
   CreateTestBlockchain createTestBlockchain = CreateTestBlockchain();
 
@@ -15,7 +16,6 @@ void main(List<String> args) {
       var result = argResults.command!.rest;
       createProjects.createProjects(result[0]);
       createTestBlockchain.pullDockerImage();
-      createTestBlockchain.runDockerContainer();
-    }
+    } else if (argResults.command!.name == "generate") {}
   }
 }
