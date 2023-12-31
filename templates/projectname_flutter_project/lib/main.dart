@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:projectname_flutter_project/Providers/wallet_provider.dart';
+import 'package:projectname_flutter_project/Screens/home.dart';
+import 'package:projectname_flutter_project/Services/contract_service.dart';
+import 'package:projectname_flutter_project/Services/wallet_service.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,108 +13,72 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Your Flutter Dapp',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-        textTheme: GoogleFonts.poppinsTextTheme(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<WalletService>(create: (_) => WalletService()),
+        ChangeNotifierProvider<WalletProvider>(create: (_) => WalletProvider()),
+        ChangeNotifierProvider<ContractService>(
+            create: (_) => ContractService()),
+      ],
+      child: MaterialApp(
+        title: 'Your Flutter Dapp',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+          textTheme: GoogleFonts.poppinsTextTheme(),
+        ),
+        home: const MainPage(),
       ),
-      home: const MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final TextEditingController _textFieldController = TextEditingController();
-  String name = "";
-  Future showTextFieldPopup() {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Enter your name"),
-          content: TextField(
-            controller: _textFieldController,
-            decoration: const InputDecoration(hintText: "Enter your name"),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  name = _textFieldController.text;
-                });
-                Navigator.pop(context);
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
+class _MainPageState extends State<MainPage> {
+  @override
+  void initState() {
+    checkWallet();
+    super.initState();
+  }
+
+  bool isInitialized = false;
+  WalletProvider walletProvider = WalletProvider();
+  WalletService walletService = WalletService();
+  void checkWallet() {
+    walletService.getPrivateKey().then((value) {
+      print("asdfasdfasf: " + value);
+      if (value.isNotEmpty) {
+        createWallet();
+      } else {
+        setState(() {
+          isInitialized = true;
+        });
+      }
+    });
+  }
+  void createWallet() {
+    setState(() {
+      isInitialized = false;
+    });
+
+    walletProvider.createWallet();
+    setState(() {
+      isInitialized = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: const Text("Your Flutter DApp"),
-          centerTitle: true,
-        ),
-        body: Center(
-          child: SizedBox(
-            width: 700,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  name.isNotEmpty
-                      ? Text(
-                          "Hello, ${_textFieldController.text}",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        )
-                      : const Text(""),
-                  Image.asset("assets/image.png"),
-                ],
-              ),
-            ),
-          ),
-        ),
-        bottomNavigationBar: const BottomAppBar(
-          color: Colors.transparent,
-          elevation: 0,
-          child: Text(
-            "Crafting with ❤️ by Mohit Gajjar",
-            textAlign: TextAlign.center,
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showTextFieldPopup();
-          },
-          child: const Icon(Icons.message_outlined),
-        ));
+    return isInitialized
+        ? const Home()
+        : const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
